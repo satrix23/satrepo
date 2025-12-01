@@ -3,65 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
-    <link rel="stylesheet" href="./style.css">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Weather App</h1>
-            <div class="search-container">
-                <input type="text" id="cityInput" placeholder="Enter city name...">
-                <button id="searchBtn" class="btn">Search</button>
-            </div>
+            <h1>My Todo List</h1>
+            <p>Get things done, one task at a time</p>
         </header>
 
-        <main>
-            <div id="loading" class="loading hidden">
-                <div class="spinner"></div>
-                <p>Loading weather data...</p>
-            </div>
+        <div class="input-section">
+            <input type="text" id="taskInput" placeholder="Enter a new task...">
+            <button id="addBtn" class="btn">Add Task</button>
+        </div>
 
-            <div id="weatherInfo" class="weather-info hidden">
-                <div class="current-weather">
-                    <h2 id="cityName" class="city-name"></h2>
-                    <div class="weather-main">
-                        <img id="weatherIcon" src="" alt="Weather Icon" class="weather-icon">
-                        <div class="temperature">
-                            <span id="currentTemp" class="current-temp"></span>
-                            <span class="temp-unit">°C</span>
-                        </div>
-                    </div>
-                    <p id="weatherDescription" class="weather-desc"></p>
-                    <div class="weather-details">
-                        <div class="detail">
-                            <span class="label">Feels like:</span>
-                            <span id="feelsLike" class="value"></span>
-                        </div>
-                        <div class="detail">
-                            <span class="label">Humidity:</span>
-                            <span id="humidity" class="value"></span>
-                        </div>
-                        <div class="detail">
-                            <span class="label">Wind:</span>
-                            <span id="windSpeed" class="value"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="active">Active</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+        </div>
 
-            <div id="errorMessage" class="error-message hidden">
-                <h3>City not found</h3>
-                <p>Please check the city name and try again.</p>
-            </div>
+        <ul id="taskList" class="task-list"></ul>
 
-            <div class="recent-searches">
-                <h3>Recent Searches</h3>
-                <div id="recentList" class="recent-list"></div>
-            </div>
-        </main>
+        <div class="stats">
+            <span id="taskCount">0 tasks left</span>
+            <button id="clearCompleted" class="btn btn-clear">Clear Completed</button>
+        </div>
     </div>
 
-    <script src="./script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
