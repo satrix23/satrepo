@@ -3,66 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Bio Page</title>
+    <title>Weather App</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <h1 class="logo">MyBio</h1>
-            <ul class="nav-menu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <img src="bishop.jpg" alt="Profile Picture" class="profile-img">
-            <h1>Bishop Jojo</h1>
-            <p>Web Developer & Designer</p>
-        </div>
-    </section>
-
-    <section id="about" class="about">
-        <div class="container">
-            <h2>About Me</h2>
-            <p>Hello! I'm a passionate web developer with experience in HTML, CSS, and JavaScript. I love creating beautiful and functional websites.</p>
-            <div class="skills">
-                <h3>Skills</h3>
-                <ul>
-                    <li>HTML5</li>
-                    <li>CSS3</li>
-                    <li>JavaScript</li>
-                    <li>Responsive Design</li>
-                </ul>
+    <div class="container">
+        <header>
+            <h1>Weather App</h1>
+            <div class="search-container">
+                <input type="text" id="cityInput" placeholder="Enter city name...">
+                <button id="searchBtn" class="btn">Search</button>
             </div>
-        </div>
-    </section>
+        </header>
 
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2>Contact Me</h2>
-            <form id="contactForm">
-                <div class="input-group">
-                    <input type="text" placeholder="Your Name" required>
-                </div>
-                <div class="input-group">
-                    <input type="email" placeholder="Your Email" required>
-                </div>
-                <div class="input-group">
-                    <textarea placeholder="Your Message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="btn">Send Message</button>
-            </form>
-        </div>
-    </section>
+        <main>
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Loading weather data...</p>
+            </div>
 
-    <footer>
-        <p>&copy; 2024 My Bio Page. All rights reserved.</p>
-    </footer>
+            <div id="weatherInfo" class="weather-info hidden">
+                <div class="current-weather">
+                    <h2 id="cityName" class="city-name"></h2>
+                    <div class="weather-main">
+                        <img id="weatherIcon" src="" alt="Weather Icon" class="weather-icon">
+                        <div class="temperature">
+                            <span id="currentTemp" class="current-temp"></span>
+                            <span class="temp-unit">°C</span>
+                        </div>
+                    </div>
+                    <p id="weatherDescription" class="weather-desc"></p>
+                    <div class="weather-details">
+                        <div class="detail">
+                            <span class="label">Feels like:</span>
+                            <span id="feelsLike" class="value"></span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Humidity:</span>
+                            <span id="humidity" class="value"></span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Wind:</span>
+                            <span id="windSpeed" class="value"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="errorMessage" class="error-message hidden">
+                <h3>City not found</h3>
+                <p>Please check the city name and try again.</p>
+            </div>
+
+            <div class="recent-searches">
+                <h3>Recent Searches</h3>
+                <div id="recentList" class="recent-list"></div>
+            </div>
+        </main>
+    </div>
 
     <script src="./script.js"></script>
 </body>
