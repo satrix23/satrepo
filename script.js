@@ -1,105 +1,164 @@
-class TodoList {
+class Calculator {
     constructor() {
-        this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        this.currentFilter = 'all';
-        this.init();
+        this.previousOperandElement = document.getElementById('previousOperand');
+        this.currentOperandElement = document.getElementById('currentOperand');
+        this.clear();
+        this.bindEvents();
     }
 
-    init() {
-        this.bindEvents();
-        this.render();
+    clear() {
+        this.currentOperand = '0';
+        this.previousOperand = '';
+        this.operation = undefined;
+        this.updateDisplay();
+    }
+
+    delete() {
+        this.currentOperand = this.currentOperand.toString().slice(0, -1);
+        if (this.currentOperand === '') {
+            this.currentOperand = '0';
+        }
+        this.updateDisplay();
+    }
+
+    appendNumber(number) {
+        if (number === '.' && this.currentOperand.includes('.')) return;
+        
+        if (this.currentOperand === '0' && number !== '.') {
+            this.currentOperand = number;
+        } else {
+            this.currentOperand = this.currentOperand.toString() + number;
+        }
+        this.updateDisplay();
+    }
+
+    chooseOperation(operation) {
+        if (this.currentOperand === '') return;
+        
+        if (this.previousOperand !== '') {
+            this.compute();
+        }
+        
+        this.operation = operation;
+        this.previousOperand = this.currentOperand;
+        this.currentOperand = '';
+        this.updateDisplay();
+    }
+
+    compute() {
+        let computation;
+        const prev = parseFloat(this.previousOperand);
+        const current = parseFloat(this.currentOperand);
+        
+        if (isNaN(prev) || isNaN(current)) return;
+
+        switch (this.operation) {
+            case '+':
+                computation = prev + current;
+                break;
+            case '-':
+                computation = prev - current;
+                break;
+            case '*':
+                computation = prev * current;
+                break;
+            case '/':
+                computation = prev / current;
+                break;
+            case '%':
+                computation = prev % current;
+                break;
+            default:
+                return;
+        }
+
+        this.currentOperand = computation.toString();
+        this.operation = undefined;
+        this.previousOperand = '';
+        this.updateDisplay();
+    }
+
+    getDisplayNumber(number) {
+        const stringNumber = number.toString();
+        const integerDigits = parseFloat(stringNumber.split('.')[0]);
+        const decimalDigits = stringNumber.split('.')[1];
+        
+        let integerDisplay;
+        
+        if (isNaN(integerDigits)) {
+            integerDisplay = '';
+        } else {
+            integerDisplay = integerDigits.toLocaleString('en', {
+                maximumFractionDigits: 0
+            });
+        }
+        
+        if (decimalDigits != null) {
+            return `${integerDisplay}.${decimalDigits}`;
+        } else {
+            return integerDisplay;
+        }
+    }
+
+    updateDisplay() {
+        this.currentOperandElement.innerText = this.getDisplayNumber(this.currentOperand);
+        
+        if (this.operation != null) {
+            this.previousOperandElement.innerText = 
+                `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+        } else {
+            this.previousOperandElement.innerText = '';
+        }
     }
 
     bindEvents() {
-        document.getElementById('addBtn').addEventListener('click', () => this.addTask());
-        document.getElementById('taskInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.addTask();
-        });
-
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => this.setFilter(e.target.dataset.filter));
-        });
-
-        document.getElementById('clearCompleted').addEventListener('click', () => this.clearCompleted());
-    }
-
-    addTask() {
-        const input = document.getElementById('taskInput');
-        const text = input.value.trim();
-
-        if (text) {
-            this.tasks.push({
-                id: Date.now(),
-                text: text,
-                completed: false
+        // Number buttons
+        document.querySelectorAll('.btn-number').forEach(button => {
+            button.addEventListener('click', () => {
+                this.appendNumber(button.getAttribute('data-number'));
             });
-            input.value = '';
-            this.save();
-            this.render();
-        }
-    }
-
-    deleteTask(id) {
-        this.tasks = this.tasks.filter(task => task.id !== id);
-        this.save();
-        this.render();
-    }
-
-    toggleTask(id) {
-        this.tasks = this.tasks.map(task => 
-            task.id === id ? {...task, completed: !task.completed} : task
-        );
-        this.save();
-        this.render();
-    }
-
-    setFilter(filter) {
-        this.currentFilter = filter;
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.filter === filter);
         });
-        this.render();
-    }
 
-    clearCompleted() {
-        this.tasks = this.tasks.filter(task => !task.completed);
-        this.save();
-        this.render();
-    }
+        // Operation buttons
+        document.querySelectorAll('.btn-operation').forEach(button => {
+            button.addEventListener('click', () => {
+                this.chooseOperation(button.getAttribute('data-operation'));
+            });
+        });
 
-    getFilteredTasks() {
-        switch (this.currentFilter) {
-            case 'active':
-                return this.tasks.filter(task => !task.completed);
-            case 'completed':
-                return this.tasks.filter(task => task.completed);
-            default:
-                return this.tasks;
-        }
-    }
+        // Equals button
+        document.querySelector('[data-action="equals"]').addEventListener('click', () => {
+            this.compute();
+        });
 
-    save() {
-        localStorage.setItem('tasks', JSON.stringify(this.tasks));
-    }
+        // Clear button
+        document.querySelector('[data-action="clear"]').addEventListener('click', () => {
+            this.clear();
+        });
 
-    render() {
-        const taskList = document.getElementById('taskList');
-        const taskCount = document.getElementById('taskCount');
-        const filteredTasks = this.getFilteredTasks();
+        // Delete button
+        document.querySelector('[data-action="delete"]').addEventListener('click', () => {
+            this.delete();
+        });
 
-        taskList.innerHTML = filteredTasks.map(task => `
-            <li class="task-item ${task.completed ? 'completed' : ''}">
-                <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} 
-                       onchange="todoList.toggleTask(${task.id})">
-                <span class="task-text">${task.text}</span>
-                <button class="delete-btn" onclick="todoList.deleteTask(${task.id})">Delete</button>
-            </li>
-        `).join('');
-
-        const activeTasks = this.tasks.filter(task => !task.completed).length;
-        taskCount.textContent = `${activeTasks} ${activeTasks === 1 ? 'task' : 'tasks'} left`;
+        // Keyboard support
+        document.addEventListener('keydown', (event) => {
+            if (event.key >= '0' && event.key <= '9') {
+                this.appendNumber(event.key);
+            } else if (event.key === '.') {
+                this.appendNumber('.');
+            } else if (event.key === '+' || event.key === '-' || event.key === '*' || event.key === '/') {
+                this.chooseOperation(event.key);
+            } else if (event.key === 'Enter' || event.key === '=') {
+                this.compute();
+            } else if (event.key === 'Escape') {
+                this.clear();
+            } else if (event.key === 'Backspace') {
+                this.delete();
+            }
+        });
     }
 }
 
-// Initialize the todo list
-const todoList = new TodoList();
+// Initialize calculator
+const calculator = new Calculator();
