@@ -5,172 +5,124 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Arial', sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 20px;
 }
 
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+.calculator {
+    background: #2d2d2d;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    max-width: 350px;
+    width: 100%;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-header h1 {
-    color: #333;
-    margin-bottom: 10px;
-}
-
-header p {
-    color: #666;
-}
-
-.input-section {
-    display: flex;
-    gap: 10px;
+.display {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 20px;
     margin-bottom: 20px;
+    text-align: right;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-#taskInput {
-    flex: 1;
-    padding: 15px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    outline: none;
-    transition: border-color 0.3s;
+.previous-operand {
+    color: #888;
+    font-size: 1.2rem;
+    min-height: 24px;
+    word-wrap: break-word;
 }
 
-#taskInput:focus {
-    border-color: #667eea;
+.current-operand {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
 }
 
 .btn {
-    background: #667eea;
-    color: white;
     border: none;
-    padding: 15px 25px;
-    border-radius: 8px;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 1.3rem;
+    font-weight: bold;
     cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s;
+    transition: all 0.2s;
+    color: white;
 }
 
 .btn:hover {
-    background: #5a6fd8;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-.filters {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    justify-content: center;
+.btn:active {
+    transform: translateY(0);
 }
 
-.filter-btn {
-    background: #f8f9fa;
-    border: 2px solid #ddd;
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s;
+.btn-number {
+    background: #4a4a4a;
 }
 
-.filter-btn.active {
-    background: #667eea;
-    color: white;
-    border-color: #667eea;
+.btn-number:hover {
+    background: #5a5a5a;
 }
 
-.task-list {
-    list-style: none;
-    margin-bottom: 20px;
+.btn-operation {
+    background: #ff9500;
 }
 
-.task-item {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    background: #f8f9fa;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    transition: all 0.3s;
-}
-
-.task-item:hover {
-    background: #e9ecef;
-}
-
-.task-item.completed {
-    opacity: 0.7;
-    text-decoration: line-through;
-}
-
-.task-checkbox {
-    margin-right: 15px;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-}
-
-.task-text {
-    flex: 1;
-    font-size: 16px;
-}
-
-.delete-btn {
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.delete-btn:hover {
-    background: #c82333;
-}
-
-.stats {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 20px;
-    border-top: 1px solid #ddd;
+.btn-operation:hover {
+    background: #ffaa33;
 }
 
 .btn-clear {
-    background: #dc3545;
-    padding: 10px 20px;
+    background: #a6a6a6;
+    color: #1a1a1a;
 }
 
 .btn-clear:hover {
-    background: #c82333;
+    background: #b6b6b6;
 }
 
-@media (max-width: 600px) {
-    .container {
-        padding: 20px;
-        margin: 10px;
+.btn-equals {
+    background: #ff9500;
+}
+
+.btn-equals:hover {
+    background: #ffaa33;
+}
+
+.btn-zero {
+    grid-column: span 2;
+}
+
+@media (max-width: 400px) {
+    .calculator {
+        padding: 15px;
     }
     
-    .input-section {
-        flex-direction: column;
+    .btn {
+        padding: 15px;
+        font-size: 1.1rem;
     }
     
-    .stats {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
+    .current-operand {
+        font-size: 2rem;
     }
 }
