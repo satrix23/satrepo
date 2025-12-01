@@ -1,147 +1,105 @@
-class WeatherApp {
+class TodoList {
     constructor() {
-        this.apiKey = 'e36f541787664f561c41e6d9ae477761'; // You can get free API key from OpenWeatherMap
-        this.baseUrl = 'https://api.openweathermap.org/data/2.5/weather';
-        this.recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
-        
+        this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        this.currentFilter = 'all';
         this.init();
     }
 
     init() {
         this.bindEvents();
-        this.renderRecentSearches();
-        
-        // Load default city weather
-        this.getWeatherByCity('London');
+        this.render();
     }
 
     bindEvents() {
-        document.getElementById('searchBtn').addEventListener('click', () => {
-            this.handleSearch();
+        document.getElementById('addBtn').addEventListener('click', () => this.addTask());
+        document.getElementById('taskInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.addTask();
         });
 
-        document.getElementById('cityInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.handleSearch();
-            }
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => this.setFilter(e.target.dataset.filter));
         });
+
+        document.getElementById('clearCompleted').addEventListener('click', () => this.clearCompleted());
     }
 
-    handleSearch() {
-        const cityInput = document.getElementById('cityInput');
-        const city = cityInput.value.trim();
-        
-        if (city) {
-            this.getWeatherByCity(city);
-            cityInput.value = '';
+    addTask() {
+        const input = document.getElementById('taskInput');
+        const text = input.value.trim();
+
+        if (text) {
+            this.tasks.push({
+                id: Date.now(),
+                text: text,
+                completed: false
+            });
+            input.value = '';
+            this.save();
+            this.render();
         }
     }
 
-    async getWeatherByCity(city) {
-        this.showLoading();
-        this.hideError();
-        this.hideWeatherInfo();
+    deleteTask(id) {
+        this.tasks = this.tasks.filter(task => task.id !== id);
+        this.save();
+        this.render();
+    }
 
-        try {
-            // For demo purposes, using mock data since we don't have a real API key
-            // In real app, you would use: const response = await fetch(`${this.baseUrl}?q=${city}&appid=${this.apiKey}&units=metric`);
-            
-            // Mock API call - replace with real API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            // Mock data - in real app, you would use data from API response
-            const mockData = {
-                name: city,
-                main: {
-                    temp: Math.round(Math.random() * 30 + 5),
-                    feels_like: Math.round(Math.random() * 30 + 5),
-                    humidity: Math.round(Math.random() * 50 + 30)
-                },
-                weather: [{
-                    main: ['Clear', 'Clouds', 'Rain', 'Snow'][Math.floor(Math.random() * 4)],
-                    description: 'Partly cloudy',
-                    icon: '01d'
-                }],
-                wind: {
-                    speed: Math.round(Math.random() * 20 + 1)
-                }
-            };
+    toggleTask(id) {
+        this.tasks = this.tasks.map(task => 
+            task.id === id ? {...task, completed: !task.completed} : task
+        );
+        this.save();
+        this.render();
+    }
 
-            this.displayWeather(mockData);
-            this.addToRecentSearches(city);
-            
-        } catch (error) {
-            console.error('Error fetching weather data:', error);
-            this.showError();
+    setFilter(filter) {
+        this.currentFilter = filter;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === filter);
+        });
+        this.render();
+    }
+
+    clearCompleted() {
+        this.tasks = this.tasks.filter(task => !task.completed);
+        this.save();
+        this.render();
+    }
+
+    getFilteredTasks() {
+        switch (this.currentFilter) {
+            case 'active':
+                return this.tasks.filter(task => !task.completed);
+            case 'completed':
+                return this.tasks.filter(task => task.completed);
+            default:
+                return this.tasks;
         }
     }
 
-    displayWeather(data) {
-        this.hideLoading();
-        this.showWeatherInfo();
-
-        document.getElementById('cityName').textContent = `${data.name}, ${data.sys?.country || ''}`;
-        document.getElementById('currentTemp').textContent = Math.round(data.main.temp);
-        document.getElementById('weatherDescription').textContent = data.weather[0].description;
-        document.getElementById('feelsLike').textContent = `${Math.round(data.main.feels_like)}°C`;
-        document.getElementById('humidity').textContent = `${data.main.humidity}%`;
-        document.getElementById('windSpeed').textContent = `${data.wind.speed} m/s`;
-
-        // In real app, you would use: document.getElementById('weatherIcon').src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
-        document.getElementById('weatherIcon').src = 'https://via.placeholder.com/100x100/74b9ff/ffffff?text=☀️';
+    save() {
+        localStorage.setItem('tasks', JSON.stringify(this.tasks));
     }
 
-    addToRecentSearches(city) {
-        // Remove if already exists
-        this.recentSearches = this.recentSearches.filter(item => item !== city);
-        
-        // Add to beginning
-        this.recentSearches.unshift(city);
-        
-        // Keep only last 5 searches
-        this.recentSearches = this.recentSearches.slice(0, 5);
-        
-        // Save to localStorage
-        localStorage.setItem('recentSearches', JSON.stringify(this.recentSearches));
-        
-        // Update UI
-        this.renderRecentSearches();
-    }
+    render() {
+        const taskList = document.getElementById('taskList');
+        const taskCount = document.getElementById('taskCount');
+        const filteredTasks = this.getFilteredTasks();
 
-    renderRecentSearches() {
-        const recentList = document.getElementById('recentList');
-        recentList.innerHTML = this.recentSearches.map(city => `
-            <div class="recent-item" onclick="weatherApp.getWeatherByCity('${city}')">
-                ${city}
-            </div>
+        taskList.innerHTML = filteredTasks.map(task => `
+            <li class="task-item ${task.completed ? 'completed' : ''}">
+                <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} 
+                       onchange="todoList.toggleTask(${task.id})">
+                <span class="task-text">${task.text}</span>
+                <button class="delete-btn" onclick="todoList.deleteTask(${task.id})">Delete</button>
+            </li>
         `).join('');
-    }
 
-    showLoading() {
-        document.getElementById('loading').classList.remove('hidden');
-    }
-
-    hideLoading() {
-        document.getElementById('loading').classList.add('hidden');
-    }
-
-    showWeatherInfo() {
-        document.getElementById('weatherInfo').classList.remove('hidden');
-    }
-
-    hideWeatherInfo() {
-        document.getElementById('weatherInfo').classList.add('hidden');
-    }
-
-    showError() {
-        document.getElementById('errorMessage').classList.remove('hidden');
-        this.hideLoading();
-    }
-
-    hideError() {
-        document.getElementById('errorMessage').classList.add('hidden');
+        const activeTasks = this.tasks.filter(task => !task.completed).length;
+        taskCount.textContent = `${activeTasks} ${activeTasks === 1 ? 'task' : 'tasks'} left`;
     }
 }
 
-// Initialize weather app
-const weatherApp = new WeatherApp();
+// Initialize the todo list
+const todoList = new TodoList();
