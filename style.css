@@ -5,184 +5,237 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-}
-
-.navbar {
-    background: #333;
-    color: white;
-    padding: 1rem 0;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1000;
-}
-
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 2rem;
-}
-
-.logo {
-    font-size: 1.5rem;
-}
-
-.nav-menu {
-    display: flex;
-    list-style: none;
-}
-
-.nav-menu li {
-    margin-left: 2rem;
-}
-
-.nav-menu a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.nav-menu a:hover {
-    color: #007bff;
-}
-
-.hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    text-align: center;
-    padding: 150px 0 100px;
-    margin-top: 60px;
-}
-
-.profile-img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin-bottom: 1rem;
-    border: 5px solid white;
-}
-
-.hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.hero p {
-    font-size: 1.2rem;
-    opacity: 0.9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    min-height: 100vh;
+    color: #333;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-.about {
-    padding: 80px 0;
-    background: #f8f9fa;
-}
-
-.about h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2.5rem;
-}
-
-.about p {
-    text-align: center;
-    font-size: 1.1rem;
     max-width: 800px;
-    margin: 0 auto 3rem;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-.skills {
+header {
     text-align: center;
+    margin-bottom: 30px;
 }
 
-.skills h3 {
-    margin-bottom: 1rem;
-}
-
-.skills ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.skills li {
-    background: #007bff;
+header h1 {
     color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-}
-
-.contact {
-    padding: 80px 0;
-}
-
-.contact h2 {
-    text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 20px;
     font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
-.input-group {
-    margin-bottom: 1.5rem;
+.search-container {
+    display: flex;
+    gap: 10px;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
-input, textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+#cityInput {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 25px;
     font-size: 16px;
+    outline: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .btn {
-    background: #007bff;
+    background: #00b894;
     color: white;
-    padding: 12px 30px;
     border: none;
-    border-radius: 5px;
+    padding: 15px 25px;
+    border-radius: 25px;
     cursor: pointer;
     font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .btn:hover {
-    background: #0056b3;
+    background: #00a085;
+    transform: translateY(-2px);
 }
 
-footer {
-    background: #333;
-    color: white;
+.weather-info {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.current-weather {
     text-align: center;
-    padding: 2rem 0;
 }
 
-@media (max-width: 768px) {
-    .nav-container {
-        flex-direction: column;
-        padding: 1rem;
+.city-name {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #2d3436;
+}
+
+.weather-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.weather-icon {
+    width: 100px;
+    height: 100px;
+}
+
+.temperature {
+    display: flex;
+    align-items: flex-start;
+}
+
+.current-temp {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #0984e3;
+}
+
+.temp-unit {
+    font-size: 2rem;
+    color: #636e72;
+    margin-top: 10px;
+}
+
+.weather-desc {
+    font-size: 1.3rem;
+    color: #636e72;
+    margin-bottom: 30px;
+    text-transform: capitalize;
+}
+
+.weather-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.detail {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.label {
+    display: block;
+    font-size: 0.9rem;
+    color: #636e72;
+    margin-bottom: 5px;
+}
+
+.value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2d3436;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: white;
+}
+
+.spinner {
+    border: 4px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top: 4px solid white;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-message {
+    background: #ff7675;
+    color: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.recent-searches {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.recent-searches h3 {
+    margin-bottom: 15px;
+    color: #2d3436;
+}
+
+.recent-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.recent-item {
+    background: #74b9ff;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.recent-item:hover {
+    background: #0984e3;
+    transform: translateY(-2px);
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
     }
     
-    .nav-menu {
-        margin-top: 1rem;
-    }
-    
-    .hero h1 {
+    header h1 {
         font-size: 2rem;
     }
     
-    .skills ul {
+    .search-container {
         flex-direction: column;
-        align-items: center;
+    }
+    
+    .weather-main {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .current-temp {
+        font-size: 3rem;
+    }
+    
+    .weather-details {
+        grid-template-columns: 1fr;
     }
 }
